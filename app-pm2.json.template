@@ -1,0 +1,12 @@
+{
+  "apps": [
+    {
+      "name": "dungeon-bot",
+      "script": "npm",
+      "args": "start",
+      "env": {
+        "BOT_TOKEN": "$token"
+      }
+    }
+  ]
+}
