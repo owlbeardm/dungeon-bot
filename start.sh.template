@@ -1,3 +1,5 @@
 export BOT_TOKEN=$token
+export GAME_CHAT_ID=
+export GAME_CHAT_POLL_THREAD_ID=
 
 npm run start
