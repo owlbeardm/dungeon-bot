@@ -1,29 +1,22 @@
 import { Telegraf } from 'telegraf';
 import { message } from 'telegraf/filters';
 import { NewPoll } from './src/model/NewPoll';
-import { CalendarDate, addDays, dayOfWeek, monthName, serializeIso8601String } from 'typescript-calendar-date';
+import { CalendarDate, addDays, dayOfWeek, monthName, serializeIso8601String, calendarDateFromJsDateObject } from 'typescript-calendar-date';
 import { WeekDay } from 'typescript-calendar-date/dist/consts';
 import * as schedule from "node-schedule";
 
-const convertDayOfTheWeekToString = (dayOfWeek: WeekDay) => {
-  switch (dayOfWeek) {
-    case 'mon': return 'Понедельник';
-    case 'tue': return 'Вторник';
-    case 'wed': return 'Среда';
-    case 'thu': return 'Четверг';
-    case 'fri': return 'Пятница';
-    case 'sat': return 'Суббота';
-    case 'sun': return 'Воскресенье';
-    default: return '';
-  }
+const stringifiedDays = {
+  mon: 'понедельник',
+  tue: 'вторник',
+  wed: 'среду',
+  thu: 'четверг',
+  fri: 'пятницу',
+  sat: 'субботу',
+  sun: 'воскресенье',
 }
 
 const createDayPoll = () => {
-  const today: CalendarDate = {
-    year: new Date().getFullYear(),
-    month: monthName(new Date().getMonth() + 1),
-    day: new Date().getDate(),
-  };
+  const today= calendarDateFromJsDateObject(new Date());
   let firstMonday = today;
   while (dayOfWeek(firstMonday) !== 'mon') {
     firstMonday = addDays(firstMonday, 1);
@@ -32,28 +25,25 @@ const createDayPoll = () => {
   while (opt.length < 7) {
     const currentOptionDay = addDays(firstMonday, opt.length);
     const isoDate = serializeIso8601String(currentOptionDay);
-    opt.push(`${convertDayOfTheWeekToString(dayOfWeek(currentOptionDay))} (${isoDate.slice(5, 7)}.${isoDate.slice(8, 10)})`);
+    opt.push(`${stringifiedDays[dayOfWeek(currentOptionDay)]} (${isoDate.slice(8, 10)}.${isoDate.slice(5, 7)})`);
   }
   const newPoll: NewPoll = {
-    question: 'Я бы сыграл в',
+    question: 'Я бы сыграл в:',
     options: opt
   }
   return newPoll;
 }
 
 
-const bot = new Telegraf(process.env.BOT_TOKEN ? process.env.BOT_TOKEN : '');
-const gameChatId = process.env.GAME_CHAT_ID ? process.env.GAME_CHAT_ID : '';
+const botToken = process.env.BOT_TOKEN ?? '';
+const gameChatId = process.env.GAME_CHAT_ID ?? '';
 const gameChatPollThreadId = process.env.GAME_CHAT_POLL_THREAD_ID ? parseInt(process.env.GAME_CHAT_POLL_THREAD_ID) : undefined;
 
-// // bot.on(message("text"), ctx => {
-//   // ctx.sendPoll("Когда играем?", ["сегодня", "завтра", "послезавтра"], { is_anonymous: false, allows_multiple_answers: true })
-// // });
-
+const bot = new Telegraf(botToken);
 bot.launch();
+
+
 const poll = createDayPoll();
-
-
 
 // Enable graceful stop
 process.once('SIGINT', () => {
@@ -69,9 +59,9 @@ process.once('SIGTERM', () => {
 
 const startScheduler = () => {
   var rule = new schedule.RecurrenceRule();
-  rule.dayOfWeek = 6;
-  rule.hour = 13;
-  rule.minute = 0;
+  // rule.dayOfWeek = 6;
+  // rule.hour = 13;
+  rule.minute = new schedule.Range(0,50);
   schedule.scheduleJob(rule, async function () {
     await bot.telegram.sendPoll(gameChatId, poll.question, poll.options, { message_thread_id: gameChatPollThreadId, disable_notification: false, is_anonymous: false, allows_multiple_answers: true }).then(data => {
       bot.telegram.unpinAllChatMessages(gameChatId);
@@ -83,4 +73,4 @@ const startScheduler = () => {
 startScheduler();
 
 
-// bot.on(message("text"), ctx => { console.log(ctx.message.chat, ctx.message.message_thread_id) });
+bot.on(message("text"), ctx => { console.log(ctx.message.chat, ctx.message.message_thread_id) });
