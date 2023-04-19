@@ -69,8 +69,9 @@ process.once('SIGTERM', () => {
 
 const startScheduler = () => {
   var rule = new schedule.RecurrenceRule();
-  rule.dayOfWeek = [0, new schedule.Range(0, 6)];
-  rule.minute = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
+  rule.dayOfWeek = 6;
+  rule.hour = 13;
+  rule.minute = 0;
   schedule.scheduleJob(rule, async function () {
     await bot.telegram.sendPoll(gameChatId, poll.question, poll.options, { message_thread_id: gameChatPollThreadId, disable_notification: false, is_anonymous: false, allows_multiple_answers: true }).then(data => {
       bot.telegram.unpinAllChatMessages(gameChatId);
@@ -82,4 +83,4 @@ const startScheduler = () => {
 startScheduler();
 
 
-bot.on(message("text"), ctx => { console.log(ctx.message.chat, ctx.message.message_thread_id) });
+// bot.on(message("text"), ctx => { console.log(ctx.message.chat, ctx.message.message_thread_id) });
