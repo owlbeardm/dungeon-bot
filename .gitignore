@@ -4,3 +4,5 @@ node_modules/
 app-pm2.json
 
 start.sh
+
+dist/

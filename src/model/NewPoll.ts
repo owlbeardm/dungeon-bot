@@ -1,4 +1,4 @@
 export interface NewPoll {
-    question: string,
-    options: string[]
+  question: string;
+  options: string[];
 }
