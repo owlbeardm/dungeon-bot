@@ -6,6 +6,7 @@ import { WeekDay } from 'typescript-calendar-date/dist/consts';
 import * as schedule from "node-schedule";
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from './src/app.module';
+import { AppService } from 'src/app.service';
 
 // const stringifiedDays = {
 //   mon: 'понедельник',
@@ -36,10 +37,6 @@ import { AppModule } from './src/app.module';
 //   return newPoll;
 // }
 
-
-// const botToken = process.env.BOT_TOKEN ?? '';
-// const gameChatId = process.env.GAME_CHAT_ID ?? '';
-// const gameChatPollThreadId = process.env.GAME_CHAT_POLL_THREAD_ID ? parseInt(process.env.GAME_CHAT_POLL_THREAD_ID) : undefined;
 
 // const bot = new Telegraf(botToken);
 // bot.launch();
@@ -78,7 +75,9 @@ import { AppModule } from './src/app.module';
 // bot.on(message("text"), ctx => { console.log(ctx.message.chat, ctx.message.message_thread_id) });
 
 async function bootstrap() {
-  const app = await NestFactory.createMicroservice(AppModule);
-  await app.listen();
+  const app = await NestFactory.createApplicationContext(AppModule);
+  const appService = app.get(AppService);
+  appService.getHello();
+  await app.close();
 }
 bootstrap();
