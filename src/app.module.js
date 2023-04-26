@@ -5,16 +5,26 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppModule = void 0;
+const package_json_1 = __importDefault(require("../package.json"));
 const common_1 = require("@nestjs/common");
 const config_1 = require("@nestjs/config");
-const configuration_1 = require("./config/configuration");
+const configuration_1 = __importDefault(require("./config/configuration"));
 const tg_bot_service_1 = require("./service/tg-bot.service");
 const schedule_1 = require("@nestjs/schedule");
 const task_service_1 = require("./service/task.service");
 const poll_service_1 = require("./service/poll.service");
 let AppModule = class AppModule {
+    constructor() {
+        this.logger = new common_1.Logger('AppModule');
+    }
+    onModuleInit() {
+        this.logger.log(`AppModule started v${package_json_1.default.version}.`);
+    }
 };
 AppModule = __decorate([
     (0, common_1.Module)({

@@ -1,2 +1,5 @@
-export declare class AppModule {
+import { OnModuleInit } from '@nestjs/common';
+export declare class AppModule implements OnModuleInit {
+    private readonly logger;
+    onModuleInit(): void;
 }
