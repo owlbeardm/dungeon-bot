@@ -6,3 +6,5 @@ start.sh
 node_modules/
 
 release.sh
+
+dist/
