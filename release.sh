@@ -23,9 +23,11 @@ npm run build
 git add -A
 git commit -am "prerelease $version"
 git flow release publish $now
+cp package.json dist/package.json
 git checkout prod
 git pull
 rm *.js
+rm *.json
 rm *.ts
 rm *.map
 rm *.tsbuildinfo
