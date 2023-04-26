@@ -22,7 +22,7 @@ npm run lint
 npm run build
 git add -A
 git commit -am "prerelease $version"
-git flow release publish $now
+git flow release finish -p -D $now
 git checkout prod
 git pull
 rm **/*.js
