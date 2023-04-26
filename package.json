@@ -1,10 +1,10 @@
 {
   "name": "dungeon-bot",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "start": "ts-node --esm index.ts",
+    "start": "node dist/index.js",
     "build": "nest build",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix"
   },
