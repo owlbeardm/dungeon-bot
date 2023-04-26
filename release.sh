@@ -33,3 +33,4 @@ git commit -am "release $version"
 git push
 git checkout release/$now
 git flow release finish -nm "$version" $now
+git push --all origin
