@@ -23,7 +23,7 @@ npm run build
 git add -A
 git commit -am "prerelease $version"
 git flow release publish $now
-git checkout release
+git checkout prod
 git pull
 rm **/*.js
 rm **/*.ts
