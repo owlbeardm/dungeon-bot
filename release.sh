@@ -25,10 +25,11 @@ git commit -am "prerelease $version"
 git flow release publish $now
 git checkout prod
 git pull
-rm **/*.js
-rm **/*.ts
-rm **/*.map
-rm **/*.tsbuildinfo
+rm *.js
+rm *.ts
+rm *.map
+rm *.tsbuildinfo
+rm -rf src
 cp -a dist/. .
 git add -A
 git commit -am "release $version"
