@@ -17,7 +17,7 @@ export class TaskService {
 
   constructor(private pollService: PollService) {}
 
-  @Cron('0 0 13 * * 6')
+  @Cron('0 0 10 * * 6')
   postWhenToPlayPoll() {
     this.logger.debug('Post new when to play poll');
     this.pollService.postWhenToPlayPoll();
